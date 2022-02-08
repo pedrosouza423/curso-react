@@ -2,11 +2,16 @@ import './index.css';
 import react from "react";
 import ReactDOM from "react-dom";
 
-const tag = <h1><strong>Olá react</strong></h1>
+import Primeiro from "./components/basicos/Primeiro"
+import ComParametro from "./components/basicos/ComParamentro"
+
 
 ReactDOM.render(
     <div>
-        {tag}
+        <Primeiro></Primeiro>
+        <ComParametro
+            titulo ="Teste"
+            subtitulo = "Implementação"/>
     </div>,
     document.getElementById('root')
 );
