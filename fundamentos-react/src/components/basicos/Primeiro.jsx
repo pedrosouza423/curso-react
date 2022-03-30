@@ -1,10 +1,11 @@
-import React from "react"
+import React from "react";
 
-export default function Primeiro(){
-    const msg = "Olá, seja bem vindo(a)!";
-    return (
-        <div>
-            <h2>{ msg }</h2>
-        </div>
-    )
+export default function Primeiro() {
+  const msg = "Primeiro is a simple application 2";
+  return (
+    <>
+      <h1>Primeiro</h1>
+      {/* <p>{msg}</p> */}
+    </>
+  );
 }
