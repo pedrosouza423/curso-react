@@ -1,0 +1,18 @@
+.vermelha{
+    color: red;
+}
+
+.verde{
+    color: green;
+}
+
+.azul{
+    color: blue;
+}
+
+#integracao{
+    height: 100vh;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
