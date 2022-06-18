@@ -3,13 +3,7 @@ import styles from './Subdivisao.module.css'
 
 const Subdivisao = (props) => {
   return (
-    <div 
-        style={{
-            background: props.preta ? "#000" : "#fff",
-        }}
-        className={styles.subdivisao}>
-
-        </div>
+    <div className={styles.subdivisao}  style={{background: props.preta ? 'black' : 'white'}}></div>
   )
 }
 
