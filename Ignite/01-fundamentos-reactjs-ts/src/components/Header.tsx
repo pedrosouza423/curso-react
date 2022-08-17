@@ -3,13 +3,10 @@ import styles from './Header.module.css'
 
 import igniteLogo from '../assets/ignite-logo.svg'
 
-const Header = () => {
+export const Header = () => {
   return (
     <header className={styles.header}>
-      <img src={igniteLogo} alt="Logo do Ignite" />
-        <strong>Ignite feed</strong>
+        <img src={igniteLogo} alt="Logo do Ignite" />
     </header>
   )
 }
-
-export default Header
