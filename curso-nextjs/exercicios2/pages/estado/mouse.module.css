@@ -1,9 +1,0 @@
-.container{
-    background-color: #222;
-    color: white;
-    height: 100vh;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    flex-direction: column;
-}
