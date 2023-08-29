@@ -22,12 +22,14 @@ interface Cycle {
   minutesAmount: number;
   startDate: Date;
   interruptedDate?: Date;
+  fineshedDate?: Date;
 }
 
 export const Home = () => {
   const [cycles, setCycles] = useState<Cycle[]>([])
   const [activeCycleId, setActiveCycleId] = useState<string | null>(null)
   const [amountSecondsPassed, setAmountSecondsPassed] = useState(0)
+  
   const { register, handleSubmit, watch, reset } = useForm<NewCycleFormData>({
     resolver: zodResolver(newCycleFormValidationSchema),
     defaultValues: {
@@ -37,21 +39,41 @@ export const Home = () => {
   });
 
   const activeCycle = cycles.find(c => c.id === activeCycleId)
+  const totalSeconds = activeCycle ? activeCycle.minutesAmount * 60 : 0;
 
-
+  
   useEffect(() => {
     let interval : number;
 
     if(activeCycle){
       interval = setInterval(() => {
-        setAmountSecondsPassed(differenceInSeconds(new Date(), activeCycle.startDate))
+        const secondsDifference = differenceInSeconds(new Date(), activeCycle.startDate)
+
+        if(secondsDifference > totalSeconds){
+          setCycles((state) => state.map(cycle => {
+            if(cycle.id === activeCycleId){
+              return {
+                ...cycle,
+                fineshedDate: new Date(),
+              }
+            }
+      
+            return cycle;
+          }))
+
+          setAmountSecondsPassed(totalSeconds)
+          clearInterval(interval);
+        } else {
+          setAmountSecondsPassed(secondsDifference)
+        }
       }, 1000);
     }
 
+    
     return () => {
       clearInterval(interval);
     }
-  }, [activeCycle])
+  }, [activeCycle, totalSeconds, activeCycleId])
 
   const handleCreateNewCycle = (data: NewCycleFormData) => {
     const newCycle: Cycle = {
@@ -85,7 +107,6 @@ export const Home = () => {
 
   }
 
-  const totalSeconds = activeCycle ? activeCycle.minutesAmount * 60 : 0;
   const currentSeconds = activeCycle ? totalSeconds - amountSecondsPassed : 0;
   
   const minutesAmount = Math.floor(currentSeconds / 60)
