@@ -1,11 +1,18 @@
+import { ThemeProvider } from "styled-components";
+import { Button } from "./components/Button/Button";
+import { defaultTheme } from "./styles/themes/default";
 
 
 export function App() {
 
   return (
-    <>
-      <h1>React Typescript</h1>
-    </>
+    <ThemeProvider theme={defaultTheme}>
+      <Button />
+      <Button variant="secondary" />
+      <Button variant="danger" />
+      <Button variant="success" />
+      <Button variant="primary" />
+    </ThemeProvider>
   )
 }
 
