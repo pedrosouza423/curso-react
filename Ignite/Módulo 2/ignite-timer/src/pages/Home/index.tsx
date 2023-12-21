@@ -1,4 +1,4 @@
-import { Play } from 'phosphor-react'
+import { HandPalm, Play } from 'phosphor-react'
 import {
   CountdownContainer,
   FormContainer,
@@ -6,6 +6,7 @@ import {
   MinutesAmountInput,
   Separator,
   StartCountDownButton,
+  StopCountDownButton,
   TaskInput,
 } from './styles'
 import { useForm } from 'react-hook-form'
@@ -29,6 +30,7 @@ interface Cycle {
   task: string
   minutesAmount: number
   startDate: Date
+  interruptedDate?: Date
 }
 
 export const Home = () => {
@@ -78,6 +80,23 @@ export const Home = () => {
     reset()
   }
 
+  function handleInterruptCycle() {
+    setCycles(
+      cycles.map((cycle) => {
+        if (cycle.id === activeCycleId) {
+          return {
+            ...cycle,
+            interruptedDate: new Date(),
+          }
+        }
+
+        return cycle
+      }),
+    )
+
+    setActiveCycleId(null)
+  }
+
   const totalSeconds = activeCycle ? activeCycle.minutesAmount * 60 : 0
   const currentSeconds = activeCycle ? totalSeconds - amountSecondsPsssed : 0
 
@@ -106,6 +125,7 @@ export const Home = () => {
             type="text"
             id="task"
             list="taskList"
+            disabled={!!activeCycle}
             {...register('task')}
           />
 
@@ -125,6 +145,7 @@ export const Home = () => {
             placeholder="00"
             type="number"
             id="minutesAmount"
+            disabled={!!activeCycle}
             {...register('minutesAmount', { valueAsNumber: true })}
           />
 
@@ -139,10 +160,17 @@ export const Home = () => {
           <span>{seconds[1]}</span>
         </CountdownContainer>
 
-        <StartCountDownButton disabled={isSubmitDisabled} type="submit">
-          <Play size={24} />
-          Começar
-        </StartCountDownButton>
+        {activeCycle ? (
+          <StopCountDownButton onClick={handleInterruptCycle} type="submit">
+            <HandPalm size={24} />
+            Interromper
+          </StopCountDownButton>
+        ) : (
+          <StartCountDownButton disabled={isSubmitDisabled} type="submit">
+            <Play size={24} />
+            Começar
+          </StartCountDownButton>
+        )}
       </form>
     </HomeContainer>
   )
