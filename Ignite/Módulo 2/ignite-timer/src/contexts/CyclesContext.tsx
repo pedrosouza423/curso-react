@@ -44,30 +44,46 @@ export const CyclesContextProvider = ({
       console.log(state)
       console.log(action)
 
-      if (action.type === 'ADD_NEW_CYCLE') {
-        return {
-          ...state,
-          cycles: [...state.cycles, action.payload],
-          activeCycleId: action.payload.id,
-        }
-      }
-      if (action.type === 'INTERRUPT_CURRENT_CYCLE') {
-        return {
-          ...state,
-          cycles: state.cycles.map((cycle) => {
-            if (cycle.id === state.activeCycleId) {
-              return {
-                ...cycle,
-                interruptedDate: new Date(),
+      switch (action.type) {
+        case 'ADD_NEW_CYCLE':
+          return {
+            ...state,
+            cycles: [...state.cycles, action.payload],
+            activeCycleId: action.payload.id,
+          }
+        case 'INTERRUPT_CURRENT_CYCLE':
+          return {
+            ...state,
+            cycles: state.cycles.map((cycle) => {
+              if (cycle.id === state.activeCycleId) {
+                return {
+                  ...cycle,
+                  interruptedDate: new Date(),
+                }
               }
-            }
 
-            return cycle
-          }),
-          activeCycleId: null,
-        }
+              return cycle
+            }),
+            activeCycleId: null,
+          }
+        case 'MARK_CURRENT_CYCLE_AS_FINISHED':
+          return {
+            ...state,
+            cycles: state.cycles.map((cycle) => {
+              if (cycle.id === state.activeCycleId) {
+                return {
+                  ...cycle,
+                  fineshedDate: new Date(),
+                }
+              }
+
+              return cycle
+            }),
+            activeCycleId: null,
+          }
+        default:
+          return state
       }
-      return state
     },
     { cycles: [], activeCycleId: null },
   )
@@ -78,19 +94,6 @@ export const CyclesContextProvider = ({
   const activeCycle = cycles.find((cycle) => cycle.id === activeCycleId)
 
   function markCurrentCycleAsFineshed() {
-    // setCycles((state) =>
-    //   state.map((cycle) => {
-    //     if (cycle.id === activeCycleId) {
-    //       return {
-    //         ...cycle,
-    //         fineshedDate: new Date(),
-    //       }
-    //     }
-
-    //     return cycle
-    //   }),
-    // )
-
     dispatch({
       type: 'MARK_CURRENT_CYCLE_AS_FINISHED',
       payload: activeCycleId,
@@ -110,7 +113,6 @@ export const CyclesContextProvider = ({
       startDate: new Date(),
     }
 
-    // setCycles((state) => [...state, newCycle])
     dispatch({
       type: 'ADD_NEW_CYCLE',
       payload: newCycle,
@@ -119,19 +121,6 @@ export const CyclesContextProvider = ({
   }
 
   function interruptCurrentCycle() {
-    // setCycles((state) =>
-    //   state.map((cycle) => {
-    //     if (cycle.id === activeCycleId) {
-    //       return {
-    //         ...cycle,
-    //         interruptedDate: new Date(),
-    //       }
-    //     }
-
-    //     return cycle
-    //   }),
-    // )
-
     dispatch({
       type: 'INTERRUPT_CURRENT_CYCLE',
       payload: activeCycleId,
